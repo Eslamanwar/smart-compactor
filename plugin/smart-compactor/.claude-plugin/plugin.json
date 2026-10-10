@@ -1,0 +1,66 @@
+{
+  "name": "smart-compactor",
+  "version": "0.5.0",
+  "description": "Cost & cache panel for Claude Code: cache countdown, cost per turn, ranked cost hints, savings from compacting, and compaction at natural breaks, judged by a model you teach with 👍/👎, with a handoff summary.",
+  "author": {
+    "name": "Eslam Mohammed"
+  },
+  "userConfig": {
+    "mode": {
+      "type": "string",
+      "title": "Mode",
+      "description": "suggest: notify only; auto: compact at a natural break (the judge decides, or the signals when judge is off); off: do nothing",
+      "options": [
+        "suggest",
+        "auto",
+        "off"
+      ],
+      "default": "auto"
+    },
+    "judge": {
+      "type": "string",
+      "title": "Break judge (auto mode)",
+      "description": "The model that reads each new prompt (context at least minTokens) and decides whether it starts after a natural break; the plugin then compacts before the prompt runs. Rate each compaction with 👍/👎 and the judge learns. off: the signals decide instead",
+      "options": [
+        "sonnet",
+        "haiku",
+        "off"
+      ],
+      "default": "sonnet"
+    },
+    "minTokens": {
+      "type": "number",
+      "title": "Minimum context (tokens)",
+      "description": "Only act when the context is at least this large",
+      "default": 150000
+    },
+    "cacheTtl": {
+      "type": "string",
+      "title": "Prompt cache lifetime",
+      "description": "Your main conversation's cache TTL (claude -p hello --output-format json shows ephemeral_1h vs 5m)",
+      "options": [
+        "1h",
+        "5m"
+      ],
+      "default": "1h"
+    },
+    "openPanel": {
+      "type": "boolean",
+      "title": "Open the panel at session start",
+      "description": "Opens the Cost & cache panel when a session starts",
+      "default": true
+    },
+    "signals": {
+      "type": "string",
+      "title": "Task-boundary signals",
+      "description": "git: commit/push/PR; git+deploy: also helm/kubectl/terraform apply; all: also tests, validate, build, finished todo lists. In a replay study no category marked a natural break more often than chance (7-17% vs 14%), so wider sets mostly add compactions mid-task; prefer suggest mode with them",
+      "options": [
+        "git",
+        "git+deploy",
+        "all"
+      ],
+      "default": "git"
+    }
+  },
+  "types": "./types/index.d.ts"
+}

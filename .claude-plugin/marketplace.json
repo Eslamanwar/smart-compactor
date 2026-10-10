@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "smart-compactor",
+  "description": "Claude Code cost tooling: cost & cache panel and task-boundary compaction",
+  "owner": { "name": "Eslam Mohammed" },
+  "plugins": [
+    {
+      "name": "smart-compactor",
+      "description": "Cost & cache panel for Claude Code: cache countdown, cost per turn, ranked cost hints, and task-boundary compaction with a handoff summary.",
+      "author": { "name": "Eslam Mohammed" },
+      "category": "productivity",
+      "source": "./plugin/smart-compactor"
+    }
+  ]
+}

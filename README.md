@@ -6,9 +6,6 @@ handoff for the next task, and a cost & cache panel shows what each turn costs.
 
 ![Demo: a commit, the Sonnet judge finds a natural break, the plugin compacts 212K → 7K, you rate it, and the compaction pays for itself](images/demo.gif)
 
-*A recreation of the CLI, drawn frame by frame. The numbers follow the plugin's own
-pricing for Claude Opus 5.5 with the 1-hour cache. The real screenshots are
-[below](#what-it-looks-like).*
 
 Claude Code re-reads the whole conversation on every request, so a large context carried
 into an unrelated task is paid for again on every turn. Compacting mid-task saves money but

@@ -5,7 +5,7 @@ import type { PanelState, Rating, Savings, Unrated } from '../types'
 import { chartAlt, costChart, meter, SERIES, sparkline } from './chart'
 import { cacheState, hints, hitRatio, minutes } from './hints'
 import type { Hint } from './hints'
-import { digest, examples, JUDGES, prompt, SYSTEM, threshold, verdict } from './judge'
+import { digest, examples, isOnHold, JUDGES, prompt, SYSTEM, threshold, verdict } from './judge'
 import type { Judge } from './judge'
 import { costSplit, kTokens, priceOf, usd, writePrice } from './pricing'
 import { report } from './report'
@@ -117,9 +117,10 @@ export const handoff = (boundary: Reason, next?: string) =>
     'Keep, in this order:',
     '1. What was just completed, in two or three sentences, with commit hashes, branch and PR links.',
     '2. Open work and follow-ups the user asked for or agreed to, verbatim where the user wrote them.',
-    '3. Decisions, constraints and preferences the user stated that still apply.',
-    '4. Files and paths that matter for the follow-up work.',
-    '5. Anything still failing, skipped or unverified.',
+    '3. Work that is paused, blocked or waiting: what it is, why it stopped, and what must be true before it resumes. Never describe paused work as in progress or as the next step.',
+    '4. Decisions, constraints and preferences that still apply, each with its reason, whether the user stated it or the work found it.',
+    '5. Files and paths that matter for the follow-up work.',
+    '6. Anything still failing, skipped or unverified.',
     'Drop: dead ends, superseded plans, raw tool and test output, and file contents that can be read again.',
   ].join('\n')
 
@@ -470,6 +471,11 @@ export const register: Register = (on, options) => {
     if (tokens < minTokens) return result
 
     if (mode === 'auto') {
+      // A commit can land with work paused on purpose: leave that compaction to the person.
+      if (isOnHold(await $.session.messages())) {
+        $.ui.log(`smart-compactor: ${boundary}, but recent turns mention paused or blocked work; not compacting automatically. Run /${COMMAND} if it is safe.`)
+        return result
+      }
       // With a judge, the signals no longer compact now: the judge decides at the next prompt.
       // If none comes before the cache expires, compact just before it does, while it is warm.
       if (judge !== undefined && !isSdk) {

@@ -73,6 +73,30 @@ export const digest = (messages: readonly SessionMessage[], newPrompt: string): 
   }
 }
 
+// Words for work stopped on purpose: a paused migration, a rollout waiting on someone.
+const HOLD = /\b(paus(e|ed|es|ing)|on hold|hold off|halt(ed)?|blocked (on|by)|waiting (for|on)|wait (for|until)|(don'?t|do not) (continue|proceed|resume|run)|resume (once|when|after|later)|stopp?(ed)? (here|before|partway|halfway))\b/i
+const HOLD_PROMPTS = 3
+
+/**
+ * Whether the last few prompts, or the answers since, say work is paused or blocked. A
+ * summary could drop why it stopped, so a compaction there is the person's call.
+ */
+export const isOnHold = (messages: readonly SessionMessage[]) => {
+  let prompts = 0
+  for (let i = messages.length - 1; i >= 0 && prompts < HOLD_PROMPTS; i--) {
+    const m = messages[i]!
+    if (m.role === 'user' && m.toolResults?.length) continue
+    const text = clean(m.text)
+    if (m.role === 'user') {
+      if (text === '' || text.startsWith('<')) continue
+      if (SUMMARY.test(text)) break
+      prompts++
+    }
+    if (HOLD.test(text)) return true
+  }
+  return false
+}
+
 const itemText = (d: Digest) =>
   [
     `Session started with: ${d.taskStart}`,

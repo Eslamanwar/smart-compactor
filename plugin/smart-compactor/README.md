@@ -24,6 +24,10 @@ with a summary written as a handoff for the next task.
   still reads the context from cache, and when you come back your next message re-writes the
   short summary instead of the whole context. A prompt sent before then cancels it, and the
   judge decides as usual. This only runs while Claude Code stays open.
+- **Paused work is left alone**: if your last three prompts, or the answers since, say work is
+  paused, on hold, blocked or waiting ("paused after step 3, resume once replica lag drops"),
+  a git signal does not compact automatically. The plugin logs why; run `/smart-compact` if
+  it is safe. The judge still decides at your next prompt.
 - **👍 / 👎 on each automatic compaction**: a band above the prompt asks whether it was a
   natural break (or run `/smart-compact-rate up|down`). The judge learns from the answers:
   - each 👎 in your last 20 ratings raises the confidence it needs by 0.05, and each 👍
@@ -39,8 +43,8 @@ with a summary written as a handoff for the next task.
   or `gh pr create/merge` command (more categories via `signals`), once the turn ends and the
   context is at least `minTokens`, it suggests `/smart-compact`. With `judge=off`, `auto` mode
   compacts on these signals instead.
-- **`/smart-compact`**: compact now, with instructions to keep open work, decisions and
-  file paths.
+- **`/smart-compact`**: compact now, with instructions to keep open work, paused work and
+  why it stopped, decisions with their reasons, and file paths.
 - **Saved by compacting**: what your compactions have saved, in the panel and in
   `/cost-panel`'s text. Each turn after a compaction is credited with the context it no
   longer re-reads; the compaction's own cost (the summarizer, and writing the new context to

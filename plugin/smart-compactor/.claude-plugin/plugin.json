@@ -1,6 +1,6 @@
 {
   "name": "smart-compactor",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Cost & cache panel for Claude Code: cache countdown, cost per turn, ranked cost hints, savings from compacting, and compaction at natural breaks, judged by a model you teach with 👍/👎, with a handoff summary.",
   "author": {
     "name": "Eslam Mohammed"

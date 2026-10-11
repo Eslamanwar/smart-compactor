@@ -4,7 +4,7 @@ A Claude Code plugin that compacts your session at **task boundaries**, when you
 finished one piece of work and are about to start the next. The summary is written as a
 handoff for the next task, and a cost & cache panel shows what each turn costs.
 
-![Demo: a commit, the Sonnet judge finds a natural break, the plugin compacts 212K → 7K, you rate it, and the compaction pays for itself](images/demo.gif)
+![Demo: an 840K context, the Sonnet judge finds a natural break, the plugin compacts 840K → 14K for $0.34, pays for itself in 3 turns, and saves $6.77 after the cache goes cold](images/demo-large-context.gif)
 
 
 Claude Code re-reads the whole conversation on every request, so a large context carried

@@ -262,7 +262,8 @@ In `auto` mode (the default):
    files edited since, the start of the last answer, and the new prompt. It answers whether
    this is a natural break, with a confidence. One check costs well under a cent.
 3. At a break with enough confidence, the plugin holds your prompt back, compacts with a
-   handoff summary that keeps open work, decisions and file paths, and then sends the prompt.
+   handoff summary that keeps open work, paused work and why it stopped, decisions with
+   their reasons, and file paths, and then sends the prompt.
 4. You rate the compaction 👍 or 👎. Each 👎 raises the confidence the judge needs, and
    every rating becomes an example the judge reads from then on, in that project only.
 
@@ -274,6 +275,11 @@ cache, that is about $0.17 for a warm compaction against up to $1.20 for a cold 
 after a turn with a git commit, push or PR, if no prompt follows, the plugin compacts 5
 minutes before the cache expires (1 minute before with the 5-minute cache). A prompt before
 then cancels this, and the judge decides as usual.
+
+A commit doesn't mean the work is done: you may commit half a migration and pause the rest.
+So if your last three prompts, or the answers since, say work is paused, on hold, blocked or
+waiting, no git signal compacts automatically. The summary is where "why we stopped" would
+get lost, so that compaction is left to you.
 
 In `suggest` mode, a successful `git commit`, `git push` or `gh pr create/merge` on a large
 context makes the plugin suggest `/smart-compact`. With `judge` set to `off`, `auto` mode
